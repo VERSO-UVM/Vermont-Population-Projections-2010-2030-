@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vermont Population Projections 2010–2030</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <nav id="site-nav">
+    <div class="nav-inner">
+      <span class="nav-title">VT Population Projections 2010–2030</span>
+      <div class="nav-links">
+        <a href="#about">About</a>
+        <a href="#age-cohort">Age Cohorts</a>
+        <a href="#towns">Towns</a>
+        <a href="#summary">Key Findings</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── ABOUT ─────────────────────────────────────────── -->
+  <section id="about">
+    <div class="about-hero">
+      <div class="about-hero-inner">
+        <h1>Vermont Population Projections 2010–2030</h1>
+        <p class="subtitle">Published August 2013 &mdash; Vermont Agency of Commerce and Community Development</p>
+        <a href="data/ACCD-DED-VTPopulationProjections-2010-2030.pdf" download class="btn-download">&#8595; Download Report (PDF)</a>
+      </div>
+    </div>
+    <div class="section-inner">
+
+      <div class="about-grid">
+        <div class="about-card">
+          <h3>About This Data</h3>
+          <p>These projections were prepared by Ken Jones, Ph.D., Economic Research Analyst at the Vermont Agency of Commerce and Community Development, with assistance from Lilly Schwarz. They cover Vermont's 14 counties and 255 towns, projecting population from the 2010 Census baseline to 2020 and 2030.</p>
+          <p>Projections are based on an <strong>age-cohort model</strong> using five-year age groupings. The key demographic factors applied are: mortality rates, birth rates, and migration rates drawn from 1990–2010 historical data.</p>
+        </div>
+
+        <div class="about-card">
+          <h3>Two Scenarios</h3>
+          <p><strong>Scenario A</strong> applies migration rates from the <em>1990s</em> — a period of higher in-migration to Vermont. This scenario generally projects higher population growth or slower decline.</p>
+          <p><strong>Scenario B</strong> applies migration rates from the <em>2000s</em> — a decade that saw lower in-migration and greater out-migration. This scenario generally projects lower growth or greater population loss.</p>
+        </div>
+
+        <div class="about-card">
+          <h3>Methodology</h3>
+          <p><strong>Mortality:</strong> Rates for cohorts over 50 continue to decline; projections assume this trend continues. For younger cohorts, the rate is leveling off.</p>
+          <p><strong>Births:</strong> County-specific birth rates are used because Vermont counties show significant variation. Age-specific rates come from Vermont Department of Health Vital Statistics.</p>
+          <p><strong>Normalization:</strong> County and town projections are normalized to match state-level projections to ensure consistency.</p>
+        </div>
+
+        <div class="about-card">
+          <h3>Town Projection Formula</h3>
+          <p><strong>2020:</strong> 2010 population + (50% of town change 2000–2010) + (25% of town change 1990–2000) + (25% of county change 2010–2020)</p>
+          <p><strong>2030:</strong> 2020 population + (35% of town change 2000–2010) + (15% of town change 1990–2000) + (50% of county change 2020–2030)</p>
+        </div>
+
+        <div class="about-card">
+          <h3>Caveats</h3>
+          <ul>
+            <li>Projections assume past conditions continue; actual results may differ due to unforeseen changes.</li>
+            <li>Based on Census populations, not actual resident counts (e.g., second-home owners, "snowbirds").</li>
+            <li>Small population sizes are susceptible to fluctuations; margin of error increases for smaller towns.</li>
+          </ul>
+        </div>
+
+        <div class="about-card">
+          <h3>Review Committee</h3>
+          <ul>
+            <li>Glenn Bailey — Vermont Agency of Education</li>
+            <li>Mathew Barewicz — Vermont Department of Labor</li>
+            <li>Sarah Lindberg — Vermont Department of Financial Regulation</li>
+            <li>Michael Moser — UVM Center for Rural Studies</li>
+            <li>Michael Nyland-Funke — Vermont Department of Health</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── AGE COHORT SECTION ────────────────────────────── -->
+  <section id="age-cohort">
+    <div class="section-inner">
+      <h2>County Age-Cohort Projections</h2>
+      <p class="section-desc">Map shading shows each county's total population % change from the 2010 Census, or absolute population count. Click any county to explore age-cohort trends.</p>
+
+      <div class="controls" id="county-controls">
+        <div class="control-group">
+          <span class="control-label">Scenario</span>
+          <div class="btn-group">
+            <button class="toggle-btn active" data-target="county" data-key="scenario" data-value="A">Scenario A <span class="btn-hint">(1990s migration)</span></button>
+            <button class="toggle-btn"        data-target="county" data-key="scenario" data-value="B">Scenario B <span class="btn-hint">(2000s migration)</span></button>
+          </div>
+        </div>
+        <div class="control-group">
+          <span class="control-label">Year</span>
+          <div class="btn-group">
+            <button class="toggle-btn active" data-target="county" data-key="year" data-value="2020">2020</button>
+            <button class="toggle-btn"        data-target="county" data-key="year" data-value="2030">2030</button>
+          </div>
+        </div>
+        <div class="control-group">
+          <span class="control-label">Show</span>
+          <div class="btn-group">
+            <button class="toggle-btn active" data-target="county" data-key="display" data-value="pct">% Change</button>
+            <button class="toggle-btn"        data-target="county" data-key="display" data-value="count">Population</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="county-layout">
+        <div id="county-map"></div>
+
+        <div id="county-panel" class="hidden">
+          <div class="panel-header">
+            <h3 id="panel-title"></h3>
+            <button id="close-panel" aria-label="Close panel">&times;</button>
+          </div>
+          <div class="panel-view-toggle">
+            <button class="view-btn active" data-view="chart">Chart</button>
+            <button class="view-btn"        data-view="table">Table</button>
+          </div>
+          <div id="panel-chart-container">
+            <canvas id="county-chart"></canvas>
+          </div>
+          <div id="panel-table-container" class="hidden">
+            <table id="county-table">
+              <thead>
+                <tr>
+                  <th>Age Group</th>
+                  <th>2010 Census</th>
+                  <th>2020</th>
+                  <th>% Change</th>
+                  <th>2030</th>
+                  <th>% Change</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="county-empty-state" class="empty-state">
+        Click a county on the map to view age-cohort projections
+      </div>
+    </div>
+  </section>
+
+  <!-- ── TOWN SECTION ─────────────────────────────────── -->
+  <section id="towns">
+    <div class="section-inner">
+      <h2>Town Population Projections</h2>
+      <p class="section-desc">Map shading shows each town's total population % change from the 2010 Census, or absolute population count. Click any town to view its projections.</p>
+
+      <div class="controls" id="town-controls">
+        <div class="control-group">
+          <span class="control-label">Scenario</span>
+          <div class="btn-group">
+            <button class="toggle-btn active" data-target="town" data-key="scenario" data-value="A">Scenario A <span class="btn-hint">(1990s migration)</span></button>
+            <button class="toggle-btn"        data-target="town" data-key="scenario" data-value="B">Scenario B <span class="btn-hint">(2000s migration)</span></button>
+          </div>
+        </div>
+        <div class="control-group">
+          <span class="control-label">Year</span>
+          <div class="btn-group">
+            <button class="toggle-btn active" data-target="town" data-key="year" data-value="2020">2020</button>
+            <button class="toggle-btn"        data-target="town" data-key="year" data-value="2030">2030</button>
+          </div>
+        </div>
+        <div class="control-group">
+          <span class="control-label">Show</span>
+          <div class="btn-group">
+            <button class="toggle-btn active" data-target="town" data-key="display" data-value="pct">% Change</button>
+            <button class="toggle-btn"        data-target="town" data-key="display" data-value="count">Population</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="town-map"></div>
+    </div>
+  </section>
+
+  <!-- ── SUMMARY SECTION ──────────────────────────────── -->
+  <section id="summary">
+    <div class="section-inner">
+      <h2>Key Findings</h2>
+      <p class="section-desc">Statewide highlights drawn directly from the projection data.</p>
+      <div id="summary-content">
+        <div class="summary-grid" id="summary-stats"></div>
+        <div class="summary-tables">
+          <div class="summary-table-block">
+            <h3>Fastest Growing Counties</h3>
+            <table class="summary-table" id="tbl-county-growth"></table>
+          </div>
+          <div class="summary-table-block">
+            <h3>Fastest Declining Counties</h3>
+            <table class="summary-table" id="tbl-county-decline"></table>
+          </div>
+          <div class="summary-table-block">
+            <h3>Fastest Growing Towns</h3>
+            <table class="summary-table" id="tbl-town-growth"></table>
+          </div>
+          <div class="summary-table-block">
+            <h3>Fastest Declining Towns</h3>
+            <table class="summary-table" id="tbl-town-decline"></table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer id="site-footer">
+    <div class="section-inner">
+      <p>Source: <em>Vermont Population Projections 2010–2030</em>, Vermont Agency of Commerce and Community Development, August 2013. Geographic boundaries from Vermont Center for Geographic Information (VCGI).</p>
+    </div>
+  </footer>
+
+  <!-- CDN Libraries -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chroma-js@2.4.2/chroma.min.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
