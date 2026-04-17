@@ -1,6 +1,6 @@
 # Vermont Population Projections 2010–2030
 
-An interactive static data visualization site for Vermont population projections, based on data published in August 2013 by the Vermont Agency of Commerce and Community Development (ACCD).
+An interactive static data visualization site for Vermont population projections, based on data published in August 2013 by the Vermont Agency of Commerce and Community Development (ACCD). This has projections for 2020 and 2030, and it is useful to note that we can say after the fact they were not vary accurate due to unexpected events like COVID and other economic factors. This is expected when trying to do projections on population as it is very hard to predict such a complicated system. 
 
 **Live site:** https://verso-uvm.github.io/Vermont-Population-Projections-2010-2030-/
 
